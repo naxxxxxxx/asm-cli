@@ -1,0 +1,43 @@
+{
+  "name": "asm-cli",
+  "version": "1.0.1",
+  "description": "asm模板下载工具",
+  "main": "index.js",
+  "bin": {
+    "asm": "./bin/www"
+  },
+  "scripts": {
+    "compile": "babel src -d dist",
+    "watch": "npm run compile -- --watch",
+    "postinstall": "asm config set"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naxxxxxxx/asm-cli.git"
+  },
+  "keywords": [
+    "web",
+    "kit",
+    "js",
+    "frontend"
+  ],
+  "author": "aver",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naxxxxxxx/asm-cli/issues"
+  },
+  "homepage": "https://github.com/naxxxxxxx/asm-cli#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-env": "^2.4.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "chalk": "^4.1.0",
+    "commander": "^6.2.1",
+    "download-git-repo": "^3.0.2",
+    "ini": "^2.0.0",
+    "inquirer": "^7.3.3",
+    "log-symbols": "^4.0.0",
+    "ora": "^5.2.0"
+  }
+}
