@@ -13,14 +13,13 @@ program.name(NAME).description(DESC).version(VERSION);
  * - config
  */
 let actionMap = {
-    install: {
+    init: {
         alias: "i",
-        description: "从模板中生成新的项目 " + chalk.blue("asm install <templateName> <projectName>"),
+        description: "从模板中生成新的项目 " + chalk.blue("asm init"),
         usages: [
-            "asm install <templateName> <projectName>",
+            "asm init",
         ],
     },
-
 };
 
 /**
@@ -30,23 +29,20 @@ Object.keys(actionMap).forEach(action => {
     program
         .command(action)
         .description(actionMap[action].description)
+        .alias(actionMap[action].alias)
         .action(() => {
             const actionArr = process.argv.slice(2);
             if (actionArr && actionArr.length > 0) {
                 const subCommand = actionArr[0];
                 switch (subCommand) {
-                    case "install":
-                        if (actionArr.length < 2) {
-                            console.log(chalk.red("请输入模板名称"));
-                            return false;
-                        } else if (actionArr.length < 3) {
-                            console.log(chalk.red("请输入要生成的目标文件夹名称"));
-                            return false;
-                        } else {
-                            apply(subCommand, ...process.argv.slice(3));
-                        }
+                    case "i":
+                        apply("init", ...process.argv.slice(3));
+                        break;
+                    case "init":
+                        apply("init", ...process.argv.slice(3));
                         break;
                     default:
+                        console.log(chalk.red("asm command error: no command " + subCommand + " found"))
                         break;
                 }
             }

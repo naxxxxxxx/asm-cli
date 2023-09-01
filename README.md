@@ -16,8 +16,8 @@ npm i -g asm-cli
 asm -h
 ```
 
-### 进行模板下载
+### 使用命令进行模板下载和项目初始化
 
 ```shell
-asm install <templateName> <projectName>
+asm init
 ```

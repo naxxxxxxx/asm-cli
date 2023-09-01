@@ -27,35 +27,30 @@ program.name(_constants.NAME).description(_constants.DESC).version(_constants.VE
  * - config
  */
 var actionMap = {
-    install: {
+    init: {
         alias: "i",
-        description: "从模板中生成新的项目 " + _chalk2.default.blue("asm install <templateName> <projectName>"),
-        usages: ["asm install <templateName> <projectName>"]
+        description: "从模板中生成新的项目 " + _chalk2.default.blue("asm init"),
+        usages: ["asm init"]
     }
-
 };
 
 /**
  * 添加 install/config命令
  */
 Object.keys(actionMap).forEach(function (action) {
-    program.command(action).description(actionMap[action].description).action(function () {
+    program.command(action).description(actionMap[action].description).alias(actionMap[action].alias).action(function () {
         var actionArr = process.argv.slice(2);
         if (actionArr && actionArr.length > 0) {
             var subCommand = actionArr[0];
             switch (subCommand) {
-                case "install":
-                    if (actionArr.length < 2) {
-                        console.log(_chalk2.default.red("请输入模板名称"));
-                        return false;
-                    } else if (actionArr.length < 3) {
-                        console.log(_chalk2.default.red("请输入要生成的目标文件夹名称"));
-                        return false;
-                    } else {
-                        _index2.default.apply(undefined, [subCommand].concat(_toConsumableArray(process.argv.slice(3))));
-                    }
+                case "i":
+                    _index2.default.apply(undefined, ["init"].concat(_toConsumableArray(process.argv.slice(3))));
+                    break;
+                case "init":
+                    _index2.default.apply(undefined, ["init"].concat(_toConsumableArray(process.argv.slice(3))));
                     break;
                 default:
+                    console.log(_chalk2.default.red("asm command error: no command " + subCommand + " found"));
                     break;
             }
         }

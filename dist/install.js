@@ -32,16 +32,43 @@ var install = function () {
             while (1) {
                 switch (_context2.prev = _context2.next) {
                     case 0:
-
                         //项目不存在
                         if (!_fs2.default.existsSync(projectName)) {
                             //命令行交互
                             _inquirer2.default.prompt([{
+                                type: "list",
+                                name: "type",
+                                message: "选择你的项目模板类型",
+                                default: 0,
+                                choices: [{
+                                    value: "full-admin",
+                                    name: "后台项目模板(前后端同项目:Umi+AntDesign+Koa2+Redis+Mysql)"
+                                }, {
+                                    value: "full-admin-redirect",
+                                    name: "后台项目模板(包含服务端中转:Umi+AntDesign+Koa2+Axios)"
+                                }, {
+                                    value: "client-admin",
+                                    name: "后台项目模板(纯前端:Umi+AntDesign)"
+                                }, {
+                                    value: "full-project",
+                                    name: "项目模板(前后端同项目:Umi+AntDesign+Koa2+Redis+Mysql))"
+                                }, {
+                                    value: "full-project-redirect",
+                                    name: "项目模板(包含服务端中转:Umi+AntDesign+Koa2+Axios)"
+                                }, {
+                                    value: "client-project",
+                                    name: "项目模板(纯前端:Umi+AntDesign)"
+                                }]
+                            }, {
                                 name: "description",
                                 message: "请输入项目描述: "
                             }, {
                                 name: "author",
                                 message: "请填写项目作者: "
+                            }, {
+                                name: "autoInstall",
+                                type: "confirm",
+                                message: "是否自动安装依赖: "
                             }]).then(function () {
                                 var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(answer) {
                                     var loading;
@@ -49,6 +76,7 @@ var install = function () {
                                         while (1) {
                                             switch (_context.prev = _context.next) {
                                                 case 0:
+                                                    // console.log("answer", answer)
                                                     //下载模板 选择模板
                                                     //通过配置文件，获取模板信息
                                                     loading = (0, _ora2.default)("正在下载模板 ...");

@@ -1,7 +1,7 @@
 {
   "name": "asm-cli",
-  "version": "1.0.1",
-  "description": "asm模板下载工具",
+  "version": "1.0.3",
+  "description": "asm project init tool",
   "main": "index.js",
   "bin": {
     "asm": "./bin/www"
@@ -16,10 +16,11 @@
     "url": "git+https://github.com/naxxxxxxx/asm-cli.git"
   },
   "keywords": [
-    "web",
-    "kit",
-    "js",
-    "frontend"
+    "asm",
+    "asm-cli",
+    "node",
+    "frontend",
+    "templates"
   ],
   "author": "aver",
   "license": "ISC",
