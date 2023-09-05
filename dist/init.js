@@ -43,6 +43,9 @@ var init = function () {
                                 message: "选择你的项目模板类型",
                                 default: 0,
                                 choices: [{
+                                    value: "server-redirect",
+                                    name: "后端项目(只含中转服务:Koa2+Axios)"
+                                }, {
                                     value: "full-admin",
                                     name: "后台项目模板(前后端同项目:Umi+AntDesign+Koa2+Redis+Mysql)"
                                 }, {
@@ -92,30 +95,38 @@ var init = function () {
                                                     _context.next = 5;
                                                     return (0, _get.downloadLocal)(type, name || type).then(function () {
                                                         loading.succeed();
-                                                        var fileName = (name || type) + "/package.json";
-                                                        if (_fs2.default.existsSync(fileName)) {
-                                                            var data = _fs2.default.readFileSync(fileName).toString();
-                                                            var json = JSON.parse(data);
-                                                            json.name = name || type;
-                                                            json.author = author;
-                                                            json.description = description;
-                                                            //修改项目文件夹中 package.json 文件
-                                                            _fs2.default.writeFileSync(fileName, JSON.stringify(json, null, "\t"), "utf-8");
+                                                        try {
+                                                            var fileName = (name || type) + "/package.json";
+                                                            if (_fs2.default.existsSync(fileName)) {
+                                                                var data = _fs2.default.readFileSync(fileName).toString();
+                                                                var json = JSON.parse(data);
+                                                                json.name = name || type;
+                                                                json.author = author;
+                                                                json.description = description;
+                                                                //修改项目文件夹中 package.json 文件
+                                                                _fs2.default.writeFileSync(fileName, JSON.stringify(json, null, "\t"), "utf-8");
 
-                                                            console.log(_logSymbols2.default.success, _chalk2.default.green("项目模板下载完成!"));
+                                                                console.log(_logSymbols2.default.success, _chalk2.default.green("项目模板下载完成!"));
 
-                                                            if (autoInstall) {
-                                                                var install = (0, _ora2.default)("开始安装依赖...");
-                                                                install.start();
-                                                                (0, _child_process.exec)("cd " + (name || type) + " && yarn install", function (err, stdout, stderr) {
-                                                                    if (err) {
-                                                                        console.log(err);
-                                                                        install.fail("依赖安装失败，您可以进入文件夹后手动执行 " + _chalk2.default.blue('yarn install'));
-                                                                        return false;
-                                                                    }
-                                                                    install.succeed("依赖安装成功，您可以进入文件夹使用 " + _chalk2.default.blue("yarn start") + " 命令启动项目");
-                                                                });
+                                                                var install = (0, _ora2.default)();
+                                                                if (autoInstall) {
+                                                                    install.start("开始安装依赖");
+                                                                    (0, _child_process.exec)("cd " + (name || type) + " && yarn install", function (err, stdout, stderr) {
+                                                                        if (err) {
+                                                                            console.log(err);
+                                                                            install.fail("依赖安装失败，您可以进入文件夹后手动执行 " + _chalk2.default.blue('yarn install'));
+                                                                            return false;
+                                                                        }
+                                                                        install.succeed("依赖安装成功，您可以进入文件夹使用 " + _chalk2.default.blue("yarn start") + " 命令启动项目");
+                                                                    });
+                                                                } else {
+                                                                    install.succeed("您可以进入文件夹使用 " + _chalk2.default.blue("yarn install") + " 安装依赖，然后使用 " + _chalk2.default.blue("yarn install") + " 启动项目");
+                                                                }
+                                                            } else {
+                                                                loading.fail("未找到相关依赖描述文件");
                                                             }
+                                                        } catch (e) {
+                                                            console.log("err", e);
                                                         }
                                                     }).catch(function (err) {
                                                         loading.fail("下载模板失败，请检查网络或是否存在对应项目模板");

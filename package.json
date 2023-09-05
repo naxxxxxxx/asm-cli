@@ -1,6 +1,6 @@
 {
   "name": "asm-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "asm project init tool",
   "main": "index.js",
   "bin": {

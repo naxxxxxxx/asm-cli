@@ -19,6 +19,10 @@ const init = async (templateName, projectName) => {
                     default: 0,
                     choices: [
                         {
+                            value: "server-redirect",
+                            name: "后端项目(只含中转服务:Koa2+Axios)"
+                        },
+                        {
                             value: "full-admin",
                             name: "后台项目模板(前后端同项目:Umi+AntDesign+Koa2+Redis+Mysql)"
                         },
@@ -72,37 +76,45 @@ const init = async (templateName, projectName) => {
                 await downloadLocal(type, name || type).then(
                     () => {
                         loading.succeed();
-                        const fileName = `${name || type}/package.json`;
-                        if (fs.existsSync(fileName)) {
-                            const data = fs.readFileSync(fileName).toString();
-                            let json = JSON.parse(data);
-                            json.name = name || type;
-                            json.author = author;
-                            json.description = description;
-                            //修改项目文件夹中 package.json 文件
-                            fs.writeFileSync(
-                                fileName,
-                                JSON.stringify(json, null, "\t"),
-                                "utf-8"
-                            );
+                        try {
+                            const fileName = `${name || type}/package.json`;
+                            if (fs.existsSync(fileName)) {
+                                const data = fs.readFileSync(fileName).toString();
+                                let json = JSON.parse(data);
+                                json.name = name || type;
+                                json.author = author;
+                                json.description = description;
+                                //修改项目文件夹中 package.json 文件
+                                fs.writeFileSync(
+                                    fileName,
+                                    JSON.stringify(json, null, "\t"),
+                                    "utf-8"
+                                );
 
-                            console.log(
-                                symbol.success,
-                                chalk.green("项目模板下载完成!")
-                            );
+                                console.log(
+                                    symbol.success,
+                                    chalk.green("项目模板下载完成!")
+                                );
 
-                            if (autoInstall) {
-                                let install = ora("开始安装依赖...");
-                                install.start();
-                                exec(`cd ${name || type} && yarn install`, (err, stdout, stderr) => {
-                                    if (err) {
-                                        console.log(err);
-                                        install.fail("依赖安装失败，您可以进入文件夹后手动执行 " + chalk.blue('yarn install'));
-                                        return false
-                                    }
-                                    install.succeed("依赖安装成功，您可以进入文件夹使用 " + chalk.blue("yarn start") + " 命令启动项目");
-                                })
+                                let install = ora();
+                                if (autoInstall) {
+                                    install.start("开始安装依赖");
+                                    exec(`cd ${name || type} && yarn install`, (err, stdout, stderr) => {
+                                        if (err) {
+                                            console.log(err);
+                                            install.fail("依赖安装失败，您可以进入文件夹后手动执行 " + chalk.blue('yarn install'));
+                                            return false
+                                        }
+                                        install.succeed("依赖安装成功，您可以进入文件夹使用 " + chalk.blue("yarn start") + " 命令启动项目");
+                                    })
+                                } else {
+                                    install.succeed("您可以进入文件夹使用 " + chalk.blue("yarn install") + " 安装依赖，然后使用 " + chalk.blue("yarn install") + " 启动项目");
+                                }
+                            } else {
+                                loading.fail("未找到相关依赖描述文件");
                             }
+                        } catch (e) {
+                            console.log("err", e);
                         }
                     }
                 ).catch((err) => {
